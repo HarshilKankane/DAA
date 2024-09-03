@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Scan</title>
+ <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            background-color: #e8e8e8;
+            padding: 15px;
+            display: block;
+            white-space: pre-wrap;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Jarvis Scan Explanations</h1>
+    <ul>
+        
+        <li><a href="algorithm.js.html" target="_blank">Jarvis Scan.js</a> - Gift wrapping algorithm for finding the convex hull of points.</li>
+        
+    </ul>
+
+    <!-- Explanation of geom.js -->
+    <h2>Brief Explanation of geom.js</h2>
+    <p>
+        This file defines a 2D vector class called Vec along with utility functions for vector operations. 
+        It includes methods for vector addition, subtraction, dot product, checking if three points make a 
+        counter-clockwise turn, checking if vectors are parallel, and calculating the square of the length of 
+        a vector. Additionally, it exports functions isCcw and isCcwA which determine if three points make a 
+        counter-clockwise turn.
+    </p>
+
+   
+
+    <!-- Explanation of plotter.js -->
+    <h2>Brief Explanation of plotter.js</h2>
+    <p>
+        This file provides a function for plotting points using the Plotly library. It takes an array of points, 
+        a mode for plotting (e.g., 'markers', 'lines', 'lines+markers'), and styling options as input. It 
+        supports plotting points represented either as instances of the Vec class or as arrays. The function 
+        generates a plot with x and y axes ranging from -1 to 101 and exports the function plot.
+    </p>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Convex Hull Computation</title>
+   <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            background-color: #e8e8e8;
+            padding: 15px;
+            display: block;
+            white-space: pre-wrap;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+   <h1><code-documentation>KPS Convex Hull Computation</a></h1>
+   <h2><a id="time-complexity">Time Complexity</a></h2>
+   <ul>
+       <li><code>quickselect</code>: O(n) on average, but can degrade to O(n^2) in the worst case.</li>
+       <li><code>bridge</code>: O(n log n) due to the use of quickselect.</li>
+       <li><code>connect</code>: O(n log n) due to the use of quickselect and bridge.</li>
+       <li><code>upper_hull</code>: O(n log n).</li>
+       <li><code>convex_hull</code>: O(n log n).</li>
+   </ul>
+   <p>This Python code implements an algorithm to compute the convex hull of a set of points in the Euclidean plane. The convex hull is the smallest convex polygon that contains all the given points.</p>
+
+   <h2><a id="code-documentation">Code Documentation</a></h2>
+   <pre><code>from flask import Flask, request, jsonify
+from flask_cors import CORS</code></pre>
+   <p>Importing required libraries: Flask for web application, request and jsonify for handling HTTP requests and responses, and CORS for enabling Cross-Origin Resource Sharing.</p>
+
+   <pre><code>app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes</code></pre>
+   <p>Creating a Flask application instance and enabling CORS for all routes.</p>
+
+   <pre><code>from random import randint
+from collections import namedtuple
+import matplotlib.pyplot as plt
+
+Point = namedtuple('Point', 'x y')</code></pre>
+   <p>Importing required libraries: randint for random number generation, namedtuple for creating a Point class, and matplotlib.pyplot for plotting (if needed). The Point class is defined as a namedtuple with x and y coordinates.</p>
+
+   <pre><code>def flipped(pts):
+   return [Point(-p.x, -p.y) for p in pts]</code></pre>
+   <p>This function takes a list of Point objects and returns a new list with the points flipped across the origin (x, y) -> (-x, -y).</p>
+
+   <pre><code>def quickselect(ls, idx, lo=0, hi=None, depth=0):</code></pre>
+   <p>This function implements the quickselect algorithm to find the k-th smallest element in an unsorted list. It has a time complexity of O(n) on average, but can degrade to O(n^2) in the worst case.</p>
+   <p>Parameters:</p>
+   <ul>
+       <li><code>ls</code>: The list from which to select the k-th smallest element.</li>
+       <li><code>idx</code>: The index of the element to select (0-based).</li>
+       <li><code>lo</code>: The lower bound of the portion of the list being searched (default: 0).</li>
+       <li><code>hi</code>: The upper bound of the portion of the list being searched (default: len(ls)-1).</li>
+       <li><code>depth</code>: The current depth of the recursion (for debugging purposes, default: 0).</li>
+   </ul>
+
+   <pre><code>def bridge(pts, v_line):</code></pre>
+   <p>This function finds the bridge of the convex hull that crosses the given vertical line. It has a time complexity of O(n log n) due to the use of quickselect.</p>
+   <p>Parameters:</p>
+   <ul>
+       <li><code>pts</code>: The set of points for which to find the bridge.</li>
+       <li><code>v_line</code>: The x-coordinate of the vertical line to cross.</li>
+   </ul>
+
+   <pre><code>def connect(lower, upper, pts):</code></pre>
+   <p>This function connects the lower and upper points of the convex hull by recursively finding the bridge points and connecting them. It has a time complexity of O(n log n) due to the use of quickselect and bridge.</p>
+   <p>Parameters:</p>
+   <ul>
+       <li><code>lower</code>: The lower point of the convex hull segment.</li>
+       <li><code>upper</code>: The upper point of the convex hull segment.</li>
+       <li><code>pts</code>: The set of points to consider for the convex hull segment.</li>
+   </ul>
+
+   <pre><code>def upper_hull(pts):</code></pre>
+   <p>This function computes the upper hull of the set of points by finding the lower and upper points and connecting them using the connect function. It has a time complexity of O(n log n).</p>
+   <p>Parameters:</p>
+   <ul>
+       <li><code>pts</code>: The set of points for which to compute the upper hull.</li>
+   </ul>
+
+   <pre><code>def convex_hull(pts):</code></pre>
+   <p>This function computes the complete convex hull of the set of points by computing the upper hull and the flipped lower hull, and combining them. It has a time complexity of O(n log n).</p>
+   <p>Parameters:</p>
+   <ul>
+       <li><code>pts</code>: The set of points for which to compute the convex hull.</li>
+   </ul>
+
+   <pre><code>@app.route('/compute-convex-hull', methods=['POST'])
+def compute_convex_hull():</code></pre>
+   <p>This is a Flask route that handles POST requests to the '/compute-convex-hull' endpoint. It expects a JSON payload with a 'points' key containing a list of (x, y) coordinate pairs representing the input points.</p>
+   <p>The function performs the following steps:</p>
+   <ol>
+       <li>Checks if the request contains JSON data.</li>
+       <li>Checks if the JSON data contains the 'points' key.</li>
+       <li>Converts the list of (x, y) coordinates into a list of Point objects.</li>
+       <li>Computes the convex hull using the convex_hull function.</li>
+       <li>Converts the list of Point objects back to (x, y) coordinate pairs.</li>
+       <li>Returns a JSON response containing the computed convex hull points and the original input points.</li>
+   </ol>
+
+   <pre><code>if __name__ == '__main__':
+   app.run(debug=True)</code></pre>
+   <p>This is a standard Python idiom that runs the Flask application in debug mode if the script is executed directly (not imported as a module).</p>
+
+   <h2>Jump to</h2>
+   <ul>
+       <li><a href="#code-documentation">Code Documentation</a></li>
+       <li><a href="#time-complexity">Time Complexity</a></li>
+   </ul>
+
+
+</body>
+</html>

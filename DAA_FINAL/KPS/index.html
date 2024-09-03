@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convex Hull Solver</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-image: url('file:///C:/Users/ASUS/OneDrive/Desktop/daa_project/a86bb481f4b1ea53c9b0582f198c07be.jpg');
+            background-size: cover; /* Ensures the background image covers the entire viewport */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #c62828; /* Red Background */
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #b71c1c; /* Darker Red on Hover */
+            color: white;
+        }
+
+        .content {
+           
+    padding: 20px;
+    text-align: center; /* Center-align content */
+}
+
+button {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    background-color: black; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Add some space between buttons */
+    margin-bottom: 10px; /* Add some space between buttons */
+}
+.pt{
+
+    background-color: black;
+}
+
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: black; /* Blue Background */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* White color with 70% opacity */
+    border-radius: 10px;
+    box-shadow: 0 0 50px white;
+}
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .point-input {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .point-input label {
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            display: inline-block;
+            width: auto;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px; /* Add some space between buttons */
+        }
+
+        button:hover {
+            background-color: gray;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        #myChart {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        /* Animation */
+        @keyframes buttonAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <!-- Links can be added here -->
+    </div>
+    <div class="content">
+        <div class="container">
+            <h1 class="point-input">Kirk-Patrick</h1>
+            <div class="point-input">
+                <label for="numPoints">Number of Points:</label>
+                <input type="number" id="numPoints" min="1" value="3" required>
+            </div>
+            <div id="pointInputs">
+                <div class="point-input">
+                    <label for="point1X">Point 1 X:</label>
+                    <input type="number" id="point1X" required>
+                    <label for="point1Y">Point 1 Y:</label>
+                    <input type="number" id="point1Y" required>
+                </div>
+                <div class="point-input">
+                    <label for="point2X">Point 2 X:</label>
+                    <input type="number" id="point2X" required>
+                    <label for="point2Y">Point 2 Y:</label>
+                    <input type="number" id="point2Y" required>
+                </div>
+                <div class="point-input">
+                    <label for="point3X">Point 3 X:</label>
+                    <input type="number" id="point3X" required>
+                    <label for="point3Y">Point 3 Y:</label>
+                    <input type="number" id="point3Y" required>
+                </div>
+            </div>
+            <button class = "pt" id="submitPoints">Submit Points</button>
+            <button class = "pt" id="clearPoints">Clear</button>
+            <button class = "pt" id="generateRandomPoints">Generate Random Points</button>
+            <button class = "pt" id="downloadFigure">Download Convex Hull Figure</button>
+
+            <div id="result"></div>
+            <p id="executionTime"></p>
+            <canvas id="myChart"></canvas>
+
+        </div>
+    </div>
+    <div class="footer">
+        <p>Made with &#10084;</p> <!-- Fixed to display the heart emoji -->
+    </div>
+
+
+    <script>
+     const numPointsInput = document.getElementById('numPoints');
+        const pointInputsDiv = document.getElementById('pointInputs');
+        const submitButton = document.getElementById('submitPoints');
+        const clearButton = document.getElementById('clearPoints');
+        const generateRandomButton = document.getElementById('generateRandomPoints');
+        const resultDiv = document.getElementById('result');
+
+        numPointsInput.addEventListener('input', updatePointInputs);
+        submitButton.addEventListener('click', submitPoints);
+        clearButton.addEventListener('click', clearInputs);
+        generateRandomButton.addEventListener('click', generateRandomPoints);
+
+        function updatePointInputs() {
+            const numPoints = parseInt(numPointsInput.value);
+            const currentInputs = pointInputsDiv.querySelectorAll('div');
+
+            // Remove extra inputs
+            for (let i = numPoints; i < currentInputs.length; i++) {
+                currentInputs[i].remove();
+            }
+
+            // Add new inputs
+            for (let i = currentInputs.length; i < numPoints; i++) {
+                const div = document.createElement('div');
+                div.classList.add('point-input');
+                div.innerHTML = `
+                    <label for="point${i + 1}X">Point ${i + 1} X:</label>
+                    <input type="number" id="point${i + 1}X" required>
+                    <label for="point${i + 1}Y">Point ${i + 1} Y:</label>
+                    <input type="number" id="point${i + 1}Y" required>
+                `;
+                pointInputsDiv.appendChild(div);
+            }
+        }
+
+        function submitPoints() {
+            submitButton.style.animation = 'buttonAnimation 0.3s ease';
+            setTimeout(() => {
+                submitButton.style.animation = '';
+            }, 300);
+
+            const numPoints = parseInt(numPointsInput.value);
+            const points = [];
+
+            for (let i = 0; i < numPoints; i++) {
+                const xInput = document.getElementById(`point${i + 1}X`);
+                const yInput = document.getElementById(`point${i + 1}Y`);
+                const x = parseFloat(xInput.value);
+                const y = parseFloat(yInput.value);
+                points.push([x, y]);
+            }
+
+            fetch('http://localhost:5000/compute-convex-hull', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ points })
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultDiv.innerHTML = `<h2>Convex Hull:</h2>${data.convexHull.map(point => `(${point[0]}, ${point[1]})`).join('<br>')}`;
+
+                const t0 = performance.now();
+
+const ctx = document.getElementById('myChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Points',
+            data: data.points.map(point => ({ x: point[0], y: point[1] })),
+            backgroundColor: 'rgb(255, 99, 132)'
+        }, {
+            label: 'Convex Hull',
+            data: [],
+            type: 'line',
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                ticks: {
+                    min: 0,
+                    max: 20
+                }
+            },
+            y: {
+                ticks: {
+                    min: 0,
+                    max: 20
+                }
+            }
+        }
+    }
+});
+
+const t1 = performance.now();
+const executionTime = t1 - t0;
+
+// Display the execution time in the HTML element
+const timeElement = document.getElementById('executionTime');
+timeElement.textContent = `KPS took ${executionTime.toFixed(2)} milliseconds.`;
+
+                let i = 0;
+                const intervalId = setInterval(() => {
+                    if (i >= data.convexHull.length) {
+                        clearInterval(intervalId);
+                    } else {
+                        chart.data.datasets[1].data.push({ x: data.convexHull[i][0], y: data.convexHull[i][1] });
+                        chart.update();
+                        i++;
+                    }
+                }, 1000);
+
+                setTimeout(() => {
+    if (data.convexHull.length > 0) {
+        chart.data.datasets[1].data.push({ x: data.convexHull[0][0], y: data.convexHull[0][1] });
+        chart.update();
+    }
+}, 1000 * data.convexHull.length);
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+            });
+        }
+        const downloadButton = document.getElementById('downloadFigure');
+
+downloadButton.addEventListener('click', () => {
+    downloadCanvas('myChart', 'convex_hull_figure.png');
+});
+
+function downloadCanvas(canvasId, filename) {
+    const canvas = document.getElementById(canvasId);
+    const image = canvas.toDataURL('image/png');
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = filename;
+
+    // Programmatically click the link to trigger the download
+    link.click();
+}
+
+        function clearInputs() {
+            clearButton.style.animation = 'buttonAnimation 0.3s ease';
+            setTimeout(() => {
+                clearButton.style.animation = '';
+            }, 300);
+
+            numPointsInput.value = ''; // Clear number of points input
+            pointInputsDiv.innerHTML = ''; // Clear point inputs
+            resultDiv.innerHTML = ''; // Clear result
+        }
+
+        function generateRandomPoints() {
+            generateRandomButton.style.animation = 'buttonAnimation 0.3s ease';
+            setTimeout(() => {
+                generateRandomButton.style.animation = '';
+            }, 300);
+
+            const numPoints = parseInt(numPointsInput.value);
+            for (let i = 0; i < numPoints; i++) {
+                const xInput = document.getElementById(`point${i + 1}X`);
+                const yInput = document.getElementById(`point${i + 1}Y`);
+                if (!xInput.value && !yInput.value) {
+                    const randomX = Math.floor(Math.random() * 20);
+                    const randomY = Math.floor(Math.random() * 20);
+                    xInput.value = randomX;
+                    yInput.value = randomY;
+                }
+            }
+        }
+
+        updatePointInputs();
+    </script>
+</body>
+</html> 

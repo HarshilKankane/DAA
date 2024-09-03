@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code Explanation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            background-color: #e8e8e8;
+            padding: 15px;
+            display: block;
+            white-space: pre-wrap;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Giftwrapper Code Explanation</h1>
+	 <!-- Explanation of giftwrapper.js -->
+    <h2>Explanation of giftwrapper.js</h2>
+    <p>
+        This file implements the gift wrapping algorithm (also known as Jarvis march) for finding the convex 
+        hull of a set of points. It starts by finding the bottommost point and then iteratively adds the next 
+        point on the hull until the loop is closed. The algorithm maintains a list of states during execution 
+        for visualization purposes. It exports the function giftWrap which takes an array of points as input and 
+        returns an array of states representing the progression of the algorithm.
+    </p>
+    <p>
+        The gift wrapping algorithm begins with i=0 and a point p0 known to be on the convex hull, e.g., the 
+        leftmost point, and selects the point pi+1 such that all points are to the right of the line pi pi+1. 
+        This point may be found in O(n) time by comparing polar angles of all points with respect to point pi 
+        taken for the center of polar coordinates. Letting i=i+1, and repeating with until one reaches ph=p0 
+        again yields the convex hull in h steps. In two dimensions, the gift wrapping algorithm is similar to 
+        the process of winding a string (or wrapping paper) around the set of points.
+    </p>
+    <p>
+        The inner loop checks every point in the set S, and the outer loop repeats for each point on the hull. 
+        Hence the total run time is O(nh). The run time depends on the size of the output, so Jarvis's march 
+        is an output-sensitive algorithm.
+    </p>
+    <p>
+        However, because the running time depends linearly on the number of hull vertices, it is only faster 
+        than algorithms such as Graham scan when the number h of hull vertices is smaller than log n. Chan's 
+        algorithm, another convex hull algorithm, combines the logarithmic dependence of Graham scan with the 
+        output sensitivity of the gift wrapping algorithm, achieving an asymptotic running time that improves 
+        on both Graham scan and gift wrapping.
+    </p>
+
+    <h2>Constant definitions</h2>
+    <code>const CANDIDATE_LINE_STYLE = {color: 'red', width: 1, dash: 'dash', name: 'Candidate'};
+    const TEST_LINE_STYLE = {color: 'blue', width: 1, dash: 'dot', name: 'Probe'};</code>
+    <p>These lines define two constant objects that represent the styles for drawing candidate lines and test lines, respectively.</p>
+
+    <h2>Function definition</h2>
+    <code>function giftWrap(points) {
+        // ...
+    }</code>
+    <p>This line defines a function named 'giftWrap' that takes an array of points as input.</p>
+
+    <h2>Variable declarations</h2>
+    <code>var p, pointOnHull, candidate, bottommost = points[0], hull = [], i, j, states = [];</code>
+    <p>This line declares several variables: 'p' and 'candidate' for storing points, 'pointOnHull' for the current point on the convex hull, 'bottommost' for the bottommost point (initially set to the first point in the input array), 'hull' for the array that will store the convex hull points, 'i' and 'j' for loop counters, and 'states' for storing the states of the algorithm.</p>
+
+    <h2>Helper function definition</h2>
+    <code>function pushState(linelist) {
+        states.push({lines: linelist, hull: hull.slice()});
+    }</code>
+    <p>This function pushes the current state of the algorithm (the list of lines to be drawn and a copy of the current convex hull) onto the 'states' array.</p>
+
+    <h2>Base case</h2>
+    <code>if (points.length < 2) {
+        return [];
+    }</code>
+    <p>This is the base case for the algorithm. If there are fewer than two points, it returns an empty array.</p>
+
+    <h2>Finding the bottommost point</h2>
+    <code>for (i = 1; i < points.length; i++) {
+        p = points[i];
+        if (p[1] < bottommost[1] || (p[1] === bottommost[1] && p[0] < bottommost[0])) {
+            bottommost = p;
+        }
+    }</code>
+    <p>This loop iterates through the input points to find the bottommost point, which will be the starting point for the convex hull construction.</p>
+    <p><strong>Time complexity:</strong> O(n), where n is the number of points, since it iterates through all points once.</p>
+
+    <h2>Initializing the convex hull and the starting point</h2>
+    <code>hull = [];
+    pointOnHull = bottommost;</code>
+    <p>The 'hull' array is initialized to an empty array, and 'pointOnHull' is set to the bottommost point.</p>
+
+    <h2>Main loop for constructing the convex hull</h2>
+    <code>while (hull.length < 2 || (hull[0] !== pointOnHull)) {
+        // ...
+    }</code>
+    <p>This is the main loop that constructs the convex hull. It continues until the hull has at least two points and the first point in the hull is the same as the current 'pointOnHull'.</p>
+
+    <h3>Adding the current point to the hull</h3>
+    <code>hull.push(pointOnHull);
+    pushState({points:[], style:{}});</code>
+    <p>The current 'pointOnHull' is added to the 'hull' array, and the current state (with an empty list of lines and no styles) is pushed onto the 'states' array.</p>
+
+    <h3>Finding the next point on the hull</h3>
+    <code>candidate = null;
+
+    for (j = 0; j < points.length; j++) {
+        p = points[j];
+        if (p === pointOnHull || p === candidate) continue;
+        if (candidate === null) {
+            candidate = p;
+            pushState([{points: [pointOnHull, candidate], style: CANDIDATE_LINE_STYLE}]);
+            continue;
+        }
+        pushState([
+            {points: [pointOnHull, candidate], style: CANDIDATE_LINE_STYLE},
+            {points: [pointOnHull, p], style: TEST_LINE_STYLE}]);
+        if (geom.isCcwA(pointOnHull, p, candidate)) {
+            candidate = p;
+            pushState([{points: [pointOnHull, candidate], style: CANDIDATE_LINE_STYLE}]);
+        }
+    }</code>
+    <p>This nested loop finds the next point on the convex hull. It iterates through all points, skipping the current 'pointOnHull' and the current 'candidate'. If 'candidate' is null, the current point 'p' becomes the new candidate, and the state with the candidate line is pushed onto the 'states' array. Otherwise, it checks if the current point 'p' makes a counter-clockwise turn with respect to the current 'pointOnHull' and 'candidate' using the 'geom.isCcwA' function. If it does, 'p' becomes the new 'candidate', and the state with the new candidate line is pushed onto the 'states' array.</p>
+    <p><strong>Time complexity:</strong> O(nh), where n is the number of points being input and h is the number of points on the convex hull, since it iterates through all points for each point on the convex hull in the worst case.</p>
+
+    <h3>Updating the current point on the hull</h3>
+    <code>pointOnHull = candidate;</code>
+    <p>After finding the next point on the convex hull, 'pointOnHull' is updated to the new 'candidate'.</p>
+
+    <h2>Closing the convex hull loop</h2>
+    <code>hull.push(pointOnHull);  // Close the loop
+    pushState([]);</code>
+    <p>After the main loop finishes, the last 'pointOnHull' is added to the 'hull' array to close the convex hull loop, and an empty state is pushed onto the 'states' array.</p>
+
+    <h2>Return statement</h2>
+    <code>return states;</code>
+    <p>The function returns the 'states' array, which contains the list of states (lines to be drawn and the current convex hull) at each step of the algorithm.</p>
+
+    <h2>Time complexity analysis</h2>
+    <p>Time Complexity:  O(n*h), where n is number of input points and h is number of output or hull points (h <= n).  For every point on the hull we examine all the other points to determine the next point.</p>
+
+	<p>Worst case, Time complexity: O(n^2).  The worst case occurs when all the points are on the hull (m = n).</p>
+   
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+    <style>
+table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            background-color: #e8e8e8;
+            padding: 15px;
+            display: block;
+            white-space: pre-wrap;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* Making the container relative */
+        }
+
+        .group-info {
+            position: absolute; /* Change position to absolute */
+            top: 15px; /* Adjust top position */
+            right: 30px; /* Adjust right position */
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto; /* Center align the image */
+            margin-top: 20px; /* Add some top margin */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentation</h1>
+        <ul>
+            <li><a href="E:\Coding\DAA Assignment\DAA_FINAL\KPS\Documentation.html">Kirk Patrick Seidal</a></li>
+            <li><a href="E:\Coding\DAA Assignment\DAA_FINAL\JARVIS\Documentation\out\fonts\global.html">Jarvis Scan</a></li>
+         
+        </ul>
+        <div class="group-info">
+            <p><strong>Group C1:</strong></p>
+            <ul>
+                <li>Harshil Kankane</li>
+                <li>Samyak Goel</li>
+                <li>Vishva Desai</li>
+                <li>Akash Mikkilineni</li>
+            </ul>
+        </div>
+
+       
+
+        <h2>Kirk-Patrick-Seidel</h2>
+        <p>The Kirk Patrick Seidel algorithm, like the Jarvis March, is both input and output dependent. Hence the complexity O(nlogh), where n is the number of input points and h the number of points on the convex hull of the two-dimensional polygon. Upper-Hull and Lower-Hull procedures take O(nlogh) time while both bridges take O(n) worst-case time to compute.</p>
+ <h2>Jarvis March</h2>
+        <p>In the Jarvis March method, every point on the hull entails an examination of all other points in the input to set to determine the next point. Due to this, the time complexity of this algorithm is O(nh), where n is the number of input points and h the number of points on the convex hull of the polygon. In a worst-case scenario, where n = h, the time complexity worsens to O(n^2), i.e., when all the input points make up the hull.</p>
+    </div>
+
+<h1>Runtime Analysis</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>n</th>
+            <th>h</th>
+            <th>nh</th>
+            <th>nlogh</th>
+            <th>Jarvis (ms)</th>
+            <th>KPS (ms)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10</td>
+            <td>5</td>
+            <td>50</td>
+            <td>23.21</td>
+            <td>0.7</td>
+            <td>11.4</td>
+        </tr>
+        <tr>
+            <td>50</td>
+            <td>8</td>
+            <td>400</td>
+            <td>150</td>
+            <td>8.4</td>
+            <td>12.8</td>
+        </tr>
+        <tr>
+            <td>100</td>
+            <td>10</td>
+            <td>1000</td>
+            <td>332.19</td>
+            <td>15.3</td>
+            <td>17.8</td>
+        </tr>
+        <tr>
+            <td>200</td>
+            <td>12</td>
+            <td>2400</td>
+            <td>716.99</td>
+            <td>40</td>
+            <td>23</td>
+        </tr>
+        <tr>
+            <td>300</td>
+            <td>16</td>
+            <td>4800</td>
+            <td>1200</td>
+            <td>43</td>
+            <td>26.3</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Although the KPS algorithm has a better asymptotic time complexity compared to Jarvis March, the actual runtime of an algorithm can be influenced by constant factors hidden in the big-O notation. In some cases, the overhead associated with the implementation of KPS (e.g., recursive calls, additional data structures) may be larger than that of the Jarvis March algorithm. For very small input sizes, these constant factors might outweigh the benefits of the lower asymptotic complexity of KPS.</p>
+<img src="E:\Coding\DAA Assignment\DAA_FINAL\JARVIS\Documentation\out\fonts\Comparison b_w Jarvis and KPS.png" alt="Jarvis and KPS">
+</body>
+</html>
