@@ -1,4 +1,4 @@
-# DAA
+# KPS and Jarvis March Visual Representation
 Project was mad as part of our DAA final assignment. Includes code and visual demo of Jarvis March and KPS algorithms for convex hull. BITS Hyderabad 2024.
 
 To see the representation of Jarvis March, open the "convexhull.html" and give the inputs. It will show automated step by step representation of convex hull creation.
