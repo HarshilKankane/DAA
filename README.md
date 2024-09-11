@@ -3,4 +3,4 @@ Project was mad as part of our DAA final assignment. Includes code and visual de
 
 To see the representation of Jarvis March, open the "convexhull.html" and give the inputs. It will show automated step by step representation of convex hull creation.
 
-To see the representation of KPS, open the "index.html" and give inputs and you will get your convex hull. For co-linear points there is a bounce effect which shows that we needed to avoid joining co-linear points.
+To see the representation of KPS, run the app.py first then open the "index.html" and give inputs and you will get your convex hull. For co-linear points there is a bounce effect which shows that we needed to avoid joining co-linear points.
